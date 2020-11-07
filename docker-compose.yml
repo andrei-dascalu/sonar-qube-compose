@@ -30,6 +30,11 @@ services:
       - traefik.enable=true
       - traefik.http.routers.sonar-server.entrypoints=websecure
       - traefik.http.routers.sonar-server.rule=Host(`sonar.mysecurity.tech`)
+      - traefik.http.routers.sonar-server.tls=true
+      - traefik.http.routers.sonar-server.tls.certresolver=myresolver
+      - traefik.http.routers.sonar-server.middlewares=test-redirectscheme
+      - traefik.http.middlewares.test-redirectscheme.redirectscheme.scheme=https
+      - traefik.http.middlewares.test-redirectscheme.redirectscheme.permanent=true
     volumes:
       - storage-sonar-data:/opt/sonarqube/data
       - storage-sonar-extensions:/opt/sonarqube/extensions
