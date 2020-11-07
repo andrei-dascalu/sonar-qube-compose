@@ -12,14 +12,16 @@ services:
       - traefik.http.routers.sonar-lb.service=api@internal
       - traefik.http.routers.sonar-lb.rule=Host(`sonar-lb.sonar.ie`)
     ports:
-      - 80:80
-      - 443:443
+    - 80:80
+    - 443:443
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik:/traefik
-      - storage-ssl:/certs
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./traefik:/traefik
+    - storage-ssl:/certs
     networks:
-      - sonar-net
+    - sonar-net
+    depends_on:
+    - sonar-db
 
   sonar-server:
     image: sonarqube:8-community
@@ -27,21 +29,21 @@ services:
     env_file:
     - .env
     networks:
-      - sonar-net
+    - sonar-net
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.sonar-server.entrypoints=websecure
-      - traefik.http.routers.sonar-server.rule=Host(`sonar.mysecurity.tech`)
-      - traefik.http.routers.sonar-server.tls=true
-      - traefik.http.routers.sonar-server.tls.certresolver=myresolver
-      - traefik.http.routers.sonar-server.middlewares=test-redirectscheme
-      - traefik.http.middlewares.test-redirectscheme.redirectscheme.scheme=https
-      - traefik.http.middlewares.test-redirectscheme.redirectscheme.permanent=true
+    - traefik.enable=true
+    - traefik.http.routers.sonar-server.entrypoints=websecure
+    - traefik.http.routers.sonar-server.rule=Host(`sonar.mysecurity.tech`)
+    - traefik.http.routers.sonar-server.tls=true
+    - traefik.http.routers.sonar-server.tls.certresolver=myresolver
+    - traefik.http.routers.sonar-server.middlewares=test-redirectscheme
+    - traefik.http.middlewares.test-redirectscheme.redirectscheme.scheme=https
+    - traefik.http.middlewares.test-redirectscheme.redirectscheme.permanent=true
     volumes:
-      - storage-sonar-data:/opt/sonarqube/data
-      - storage-sonar-extensions:/opt/sonarqube/extensions
+    - storage-sonar-data:/opt/sonarqube/data
+    - storage-sonar-extensions:/opt/sonarqube/extensions
     depends_on:
-    - sonar-db
+    - sonar-lb
 
   sonar-db:
     image: postgres:13-alpine
@@ -50,6 +52,8 @@ services:
     - .env
     volumes:
     - sonar-db-data:/var/lib/postgresql/data
+    networks:
+    - sonar-net
 
 volumes:
   storage-ssl:
