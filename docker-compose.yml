@@ -24,6 +24,8 @@ services:
   sonar-server:
     image: sonarqube:8-community
     container_name: sonar-server
+    env_file:
+    - .env
     networks:
       - sonar-net
     labels:
@@ -38,13 +40,26 @@ services:
     volumes:
       - storage-sonar-data:/opt/sonarqube/data
       - storage-sonar-extensions:/opt/sonarqube/extensions
+    depends_on:
+    - sonar-db
+
+  sonar-db:
+    image: postgres:13-alpine
+    container_name: sonar-db
+    env_file:
+    - .env
+    volumes:
+    - sonar-db-data:/var/lib/postgresql/data
 
 volumes:
   storage-ssl:
     external: true
   storage-sonar-data:
     external: true
-  storage-sonar-extensions: {}
+  storage-sonar-extensions:
+    external: true
+  sonar-db-data:
+    external: true
 
 networks:
   sonar-net:
