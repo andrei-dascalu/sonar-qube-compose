@@ -1,0 +1,27 @@
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: andrei.dascalu+sonar@qubiz.com
+      storage: /certs/acme.json
+      httpChallenge:
+        # used during the challenge
+        entryPoint: web
+
+api:
+  insecure: true
+  dashboard: true
+
+providers:
+  docker:
+    exposedByDefault: false
+    watch: true
+
+log:
+  format: json
+  level: WARN

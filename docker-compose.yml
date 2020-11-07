@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  sonar-lb:
+    command:
+      - --configFile=/traefik/conf.yml
+    container_name: sonar-lb
+    image: traefik:v2.3
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sonar-lb.entrypoints=websecure
+      - traefik.http.routers.sonar-lb.service=api@internal
+      - traefik.http.routers.sonar-lb.rule=Host(`sonar-lb.sonar.ie`)
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik:/traefik
+      - storage-ssl:/certs
+    networks:
+      - sonar-net
+
+  sonar-server:
+    image: sonarqube:8-community
+    container_name: sonar-server
+    networks:
+      - sonar-net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sonar-lb.entrypoints=websecure
+      - traefik.http.routers.sonar-lb.service=api@internal
+      - traefik.http.routers.sonar-lb.rule=Host(`sonar.mysecurity.tech`)
+    volumes:
+      - storage-sonar-data:/opt/sonarqube/data
+      - storage-sonar-extensions:/opt/sonarqube/extensions
+
+volumes:
+  storage-ssl:
+    external: true
+  storage-sonar-data:
+    external: true
+  storage-sonar-extensions: {}
+
+networks:
+  sonar-net:
+    name: sonar-net
