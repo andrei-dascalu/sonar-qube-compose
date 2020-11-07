@@ -28,9 +28,9 @@ services:
       - sonar-net
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sonar-lb.entrypoints=websecure
-      - traefik.http.routers.sonar-lb.service=api@internal
-      - traefik.http.routers.sonar-lb.rule=Host(`sonar.mysecurity.tech`)
+      - traefik.http.routers.sonar-server.entrypoints=websecure
+      - traefik.http.routers.sonar-server.service=api@internal
+      - traefik.http.routers.sonar-server.rule=Host(`sonar.mysecurity.tech`)
     volumes:
       - storage-sonar-data:/opt/sonarqube/data
       - storage-sonar-extensions:/opt/sonarqube/extensions

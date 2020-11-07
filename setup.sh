@@ -5,7 +5,7 @@ apt-get update && apt-get -y dist-upgrade && apt-get -y autoremove
 
 apt-get -y remove docker docker-engine docker.io containerd runc
 
-apt-get install \
+apt-get -y install \
     apt-transport-https \
     ca-certificates \
     curl \
