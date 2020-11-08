@@ -10,7 +10,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.sonar-lb.entrypoints=websecure
       - traefik.http.routers.sonar-lb.service=api@internal
-      - traefik.http.routers.sonar-lb.rule=Host(`sonar-lb.sonar.ie`)
+      - traefik.http.routers.sonar-lb.rule=Host(`sonar-lb.qubiz.dev`)
     ports:
     - 80:80
     - 443:443
@@ -33,7 +33,7 @@ services:
     labels:
     - traefik.enable=true
     - traefik.http.routers.sonar-server.entrypoints=websecure
-    - traefik.http.routers.sonar-server.rule=Host(`sonar.mysecurity.tech`)
+    - traefik.http.routers.sonar-server.rule=Host(`sonar.qubiz.dev`)
     - traefik.http.routers.sonar-server.tls=true
     - traefik.http.routers.sonar-server.tls.certresolver=myresolver
     - traefik.http.routers.sonar-server.middlewares=test-redirectscheme
