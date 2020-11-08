@@ -11,6 +11,8 @@ services:
       - traefik.http.routers.sonar-lb.entrypoints=websecure
       - traefik.http.routers.sonar-lb.service=api@internal
       - traefik.http.routers.sonar-lb.rule=Host(`sonar-lb.qubiz.dev`)
+      - traefik.http.routers.sonar-server.tls=true
+      - traefik.http.routers.sonar-server.tls.certresolver=myresolver
     ports:
     - 80:80
     - 443:443
