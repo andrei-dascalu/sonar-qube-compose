@@ -25,3 +25,13 @@ providers:
 log:
   format: json
   level: WARN
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addServicesLabels: true
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
