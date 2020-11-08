@@ -13,6 +13,8 @@ services:
       - traefik.http.routers.sonar-lb.rule=Host(`sonar-lb.qubiz.dev`)
       - traefik.http.routers.sonar-lb.tls=true
       - traefik.http.routers.sonar-lb.tls.certresolver=myresolver
+      - traefik.http.middlewares.sonar-lb-auth.basicauth.usersfile=/traefik/users.auth
+      - traefik.http.routers.sonar-lb.middlewares=sonar-lb-auth
     ports:
     - 80:80
     - 443:443
